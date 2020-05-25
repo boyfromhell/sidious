@@ -56,7 +56,7 @@ class PersonnageController extends Controller
      */
     public function show(Personnage $personnage)
     {
-        return $personnage->load("owner");
+        return $personnage->load("owner", "account", "fiche", "fiche.lines");
     }
 
     /**
@@ -238,6 +238,7 @@ class PersonnageController extends Controller
 
             $personnage->setActive(true);
             DB::commit();
+            event(new PersonnageActivated($personnage));
         } catch (\Exception $exception) {
             DB::rollBack();
             throw $exception;

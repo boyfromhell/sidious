@@ -32,7 +32,7 @@ trait HasEconomy
      * @param int $amount
      * @return bool
      */
-    public function isSolvable(int $amount)
+    public function isSolvable(int $amount): bool
     {
         $balance = $this->account->balance;
         return ($balance >= $amount);

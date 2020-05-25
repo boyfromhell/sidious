@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace Modules\Economy\Commands;
 
 use Modules\Economy\Actions\PerformEconomicCycle;
 use Illuminate\Console\Command;
@@ -12,7 +12,7 @@ class EconomicCycleCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'economy:make:cycle';
+    protected $signature = 'economy:cycle';
 
     /**
      * The console command description.

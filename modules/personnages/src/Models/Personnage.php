@@ -3,9 +3,8 @@ namespace Modules\Personnages\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Modules\Economy\Contracts\EconomicActor;
 use Modules\Economy\Traits\HasEconomy;
-use Modules\Factions\Models\Assignation;
-use Modules\Factions\Models\Group;
 use Modules\Factions\Traits\InGroups;
 use Modules\Forum\Traits\PostsInForum;
 use Modules\Inventory\Contracts\HasInventoryContract;
@@ -14,15 +13,14 @@ use Modules\Personnages\Events\PersonnageCreated;
 use Modules\Personnages\Events\PersonnageDeleted;
 use Modules\Personnages\Events\PersonnageUpdated;
 use Silber\Bouncer\Database\HasRolesAndAbilities;
-use Spatie\MediaLibrary\HasMedia\HasMedia;
-use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
-use Spatie\Tags\HasTags;
 
-class Personnage extends Model implements HasMedia, HasInventoryContract
+class Personnage extends Model implements HasMedia, HasInventoryContract, EconomicActor
 {
-    use SoftDeletes, HasSlug, HasMediaTrait, HasRolesAndAbilities, HasEconomy, InGroups, PostsInForum, HasInventory;
+    use SoftDeletes, HasSlug, InteractsWithMedia, HasRolesAndAbilities, HasEconomy, InGroups, PostsInForum, HasInventory;
 
     /**
      * The attributes that are mass assignable.
@@ -70,7 +68,7 @@ class Personnage extends Model implements HasMedia, HasInventoryContract
      *
      * @return void
      */
-    public function registerMediaCollections()
+    public function registerMediaCollections(): void
     {
         $this->addMediaCollection('avatar')->singleFile();
     }

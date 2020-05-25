@@ -18,7 +18,7 @@ class CreateTransactionsTable extends Migration
             $table->unsignedMediumInteger("account_from")->nullable()->index();
             $table->unsignedMediumInteger("account_to")->index();
             $table->unsignedBigInteger("amount")->default(0);
-            $table->boolean("isCredit")->default(false);
+            $table->boolean("isCredit")->default(true);
             $table->string("motivation");
             $table->timestamps();
             $table->softDeletes();

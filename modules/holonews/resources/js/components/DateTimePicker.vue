@@ -27,7 +27,9 @@
 
         watch: {
             value(val) {
-                this.buildComponents(val);
+                if (val !== this.value) {
+                    this.buildComponents(val);
+                }
             },
 
 
@@ -47,9 +49,15 @@
 
         methods: {
             buildComponents(val) {
-                let date = moment(val + ' Z').utc();
+                const date = moment(val).utc();
 
-                this.dateComponents = {month: date.format('MM'), day: date.format('DD'), year: date.format('YYYY'), hour: date.format('HH'), minute: date.format('mm')};
+                this.dateComponents = {
+                    month: date.format('MM'),
+                    day: date.format('DD'),
+                    year: date.format('YYYY'),
+                    hour: date.format('HH'),
+                    minute: date.format('mm')
+                };
             }
         }
     }

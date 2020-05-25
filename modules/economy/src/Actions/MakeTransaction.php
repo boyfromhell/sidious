@@ -1,66 +1,74 @@
 <?php
-
 namespace Modules\Economy\Actions;
 
-use Modules\Economy\Events\TransactionConfirmed;
-use Modules\Economy\Exceptions\TransactionNotAllowed;
 use Lorisleiva\Actions\Action;
 use Modules\Economy\Models\Account;
 use Modules\Economy\Models\Transaction;
 
 class MakeTransaction extends Action
 {
-    public function authorize()
+    public $from;
+    public $to;
+    public $amount;
+    public $motivation;
+
+    /**
+     * MakeTransaction
+     *
+     * @param int $amount
+     * @param string $motivation
+     * @param Account $to
+     * @param Account|null $from
+     */
+    public function __construct(int $amount, string $motivation, Account $to, Account $from = null)
     {
-        return true;
+        $this->from = $from;
+        $this->to = $to;
+        $this->amount = $amount;
+        $this->motivation = $motivation;
+        parent::__construct();
     }
 
-    public function rules()
+    /**
+     * Solvability is required to perform action
+     *
+     * @return boolean
+     */
+    public function authorize()
     {
-        return [
-            "from" => "integer",
-            "to" => "required|integer",
-            "amount" => "required|integer",
-            "isCredit" => "required|boolean",
-            "motivation" => "required|string|min:3"
-        ];
+        if($this->from) {
+            return $this->from->canPay($this->amount);
+        }
+        return true;
     }
 
     /**
      * Make a transaction
      *
-     * @throws TransactionNotAllowed|\Exception
+     * @throws \Exception
      */
     public function handle()
     {
-        /*
-         * CHECKS
-         */
-        $from = ($this->get("from")) ? Account::find($this->get("from")) : null;
-        $to = Account::findOrFail($this->get("to"));
-        if($this->get('amount') < 0) throw new TransactionNotAllowed();
-        if($from) {
-            if(!$from->canPay($this->get("amount"))) throw new TransactionNotAllowed("Not enough funds");
-        }
-
-        /*
-         * PROCEED
-         */
         try {
             $transaction = Transaction::create([
-                "account_from" => ($from) ? $from->id : null,
-                "account_to" => $to->id,
-                "amount" => $this->get("amount"),
-                "isCredit" => $this->get("isCredit"),
-                "motivation" => $this->get("motivation")
+                "account_from" => ($this->from) ? $this->from->id : null,
+                "account_to" => $this->to->id,
+                "amount" => $this->amount,
+                "isCredit" => true,
+                "motivation" => $this->motivation,
             ]);
-            event(new TransactionConfirmed($transaction));
             return $transaction;
         } catch (\Exception $exception) {
             throw $exception;
         }
     }
 
+    /**
+     * Respond with created transaction
+     *
+     * @param $transaction
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function response($transaction)
     {
         return response()->json($transaction);

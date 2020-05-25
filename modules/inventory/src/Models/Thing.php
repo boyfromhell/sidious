@@ -3,8 +3,8 @@ namespace Modules\Inventory\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\MediaLibrary\HasMedia\HasMedia;
-use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 use Spatie\Tags\HasTags;
@@ -17,7 +17,7 @@ use Spatie\Tags\HasTags;
  */
 class Thing extends Model implements HasMedia
 {
-    use SoftDeletes, HasSlug, HasTags, HasMediaTrait;
+    use SoftDeletes, HasSlug, HasTags, InteractsWithMedia;
 
     protected $table = "objects";
 
@@ -36,7 +36,7 @@ class Thing extends Model implements HasMedia
      *
      * @return void
      */
-    public function registerMediaCollections()
+    public function registerMediaCollections(): void
     {
         $this->addMediaCollection('things_image')->singleFile();
     }

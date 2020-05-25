@@ -3,6 +3,7 @@
 namespace App\Nova;
 
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\MorphTo;
@@ -72,6 +73,8 @@ class Account extends Resource
             Number::make("Solde", "balance")
                 ->sortable()
                 ->exceptOnForms(),
+
+            Boolean::make("Gelé", "isFrozen"),
 
             BelongsTo::make("Fiche"),
         ];

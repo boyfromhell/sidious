@@ -5,16 +5,18 @@ namespace Modules\Galaxy\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Kalnoy\Nestedset\NodeTrait;
+use Modules\Economy\Contracts\EconomicActor;
+use Modules\Economy\Traits\HasEconomy;
 use Modules\Inventory\Contracts\HasInventoryContract;
 use Modules\Inventory\Traits\HasInventory;
-use Spatie\MediaLibrary\HasMedia\HasMedia;
-use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-class Secteur extends Model implements HasMedia, HasInventoryContract
+class Secteur extends Model implements HasMedia, HasInventoryContract, EconomicActor
 {
-    use SoftDeletes, NodeTrait, HasSlug, HasMediaTrait, HasInventory;
+    use SoftDeletes, NodeTrait, HasSlug, InteractsWithMedia, HasInventory, HasEconomy;
 
     /**
      * Get the options for generating the slug.
@@ -31,7 +33,7 @@ class Secteur extends Model implements HasMedia, HasInventoryContract
      *
      * @return void
      */
-    public function registerMediaCollections()
+    public function registerMediaCollections(): void
     {
         $this->addMediaCollection('secteurs_image')->singleFile();
     }

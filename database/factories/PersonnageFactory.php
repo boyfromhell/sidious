@@ -2,7 +2,8 @@
 
 use Faker\Generator as Faker;
 
-$factory->define(\Nicolasey\Personnage\Models\Personnage::class, function (Faker $faker) {
+/** @var \Illuminate\Database\Eloquent\Factory $factory */
+$factory->define(\Modules\Personnages\Models\Personnage::class, function (Faker $faker) {
     static $name;
     static $owner_id;
 

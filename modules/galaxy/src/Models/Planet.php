@@ -4,20 +4,21 @@ namespace Modules\Galaxy\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Modules\Economy\Contracts\EconomicActor;
 use Modules\Economy\Traits\HasCompanies;
 use Modules\Economy\Traits\HasEconomy;
 use Modules\Factions\Traits\InGroups;
 use Modules\Inventory\Contracts\HasInventoryContract;
 use Modules\Inventory\Traits\HasInventory;
-use Nicolasey\Personnages\Models\Personnage;
-use Spatie\MediaLibrary\HasMedia\HasMedia;
-use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+use Modules\Personnages\Models\Personnage;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-class Planet extends Model implements HasMedia, HasInventoryContract
+class Planet extends Model implements HasMedia, HasInventoryContract, EconomicActor
 {
-    use SoftDeletes, HasSlug, HasCompanies, HasEconomy, HasMediaTrait, InGroups, HasInventory;
+    use SoftDeletes, HasSlug, HasCompanies, HasEconomy, InteractsWithMedia, InGroups, HasInventory;
 
     protected $guarded = [];
 
@@ -36,7 +37,7 @@ class Planet extends Model implements HasMedia, HasInventoryContract
      *
      * @return void
      */
-    public function registerMediaCollections()
+    public function registerMediaCollections(): void
     {
         $this->addMediaCollection('planets_image')->singleFile();
     }

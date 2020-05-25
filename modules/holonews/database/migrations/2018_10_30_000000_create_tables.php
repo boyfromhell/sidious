@@ -40,7 +40,7 @@ class CreateTables extends Migration
             $table->boolean('published')->default(false);
             $table->dateTime('publish_date')->default('2018-10-10 00:00:00');
             $table->string('featured_image')->nullable();
-            $table->string('featured_image_caption');
+            $table->string('featured_image_caption')->nullable();
             $table->unsignedBigInteger('author_id')->index();
             $table->timestamps();
         });

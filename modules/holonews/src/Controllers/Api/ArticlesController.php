@@ -26,8 +26,15 @@ class ArticlesController extends Controller
                 });
             })
             ->orderBy('created_at', 'DESC')
-            ->paginate(30);
+            ->paginate(4);
         return $all;
+    }
+
+    public function highlights()
+    {
+        $highlights = Article::with(['author', 'tags'])
+            ->orderBy('created_at', 'DESC')
+            ->take(4)->get();
     }
 
     /**

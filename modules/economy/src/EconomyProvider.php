@@ -15,7 +15,9 @@ class EconomyProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->commands([
+            Commands\EconomicCycleCommand::class,
+        ]);
     }
 
     /**
